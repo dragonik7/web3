@@ -1,4 +1,3 @@
-from django.contrib.auth.models import User
 from django.db.models.aggregates import Sum
 from django.db.models.query_utils import Q
 from drf_spectacular.utils import extend_schema
@@ -45,5 +44,5 @@ class ExerciseNotDoingUserView(APIView):
     serializer_class = ExerciseNotDoingSerializer
 
     def get(self, request, apiuser):
-        queryset = Exercise.objects.raw('select * from users_exercise e left join users_exerciseuser eu on eu.exercise_id = e.id where eu.id is null')
+        queryset = Exercise.objects.raw('select * from users_exercise e left join users_exerciseuser eu on eu.exercise_id = e.id where eu.id is null or user_id not like %s', [apiuser])
         return Response(self.serializer_class(queryset, many=True).data)
