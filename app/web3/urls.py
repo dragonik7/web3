@@ -4,11 +4,12 @@ from django.urls import path, include
 from drf_spectacular.views import SpectacularSwaggerView, SpectacularAPIView
 from rest_framework import routers
 
-from users.views import UserViewSet, ExerciseViewSet, ExerciseListUserView, ExerciseNotDoingUserView
+from users.views import UserViewSet, ExerciseViewSet, ExerciseListUserView, ExerciseNotDoingUserView, ExerciseUserViewSet
 from web3 import settings
 router = routers.DefaultRouter()
 router.register(r'user', UserViewSet, basename='user')
 router.register(r'exercise', ExerciseViewSet, basename='exercise')
+router.register(r'exercise-user', ExerciseUserViewSet, basename='exercise_user')
 
 users = [
     path('', include(router.urls)),

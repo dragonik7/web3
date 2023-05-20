@@ -37,3 +37,16 @@ class ExerciseNotDoingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Exercise
         fields = '__all__'
+
+
+class ExerciseUserCreateSerializer(serializers.ModelSerializer):
+    exercise = ExerciseSerializer
+    class Meta:
+        model = ExerciseUser
+        fields = ('user', 'exercise')
+
+    def create(self, validated_data):
+        return ExerciseUser.objects.create(
+            user=validated_data['user'],
+            exercise=validated_data['exercise']
+        )

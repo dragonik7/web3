@@ -7,7 +7,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from users.models import Exercise, ExerciseUser, ApiUser
-from users.serializer import ExerciseSerializer, ExerciseUserSerializer, ApiUsersSerializer, ExerciseNotDoingSerializer
+from users.serializer import ExerciseSerializer, ExerciseUserSerializer, ApiUsersSerializer, ExerciseNotDoingSerializer, \
+    ExerciseUserCreateSerializer
 
 
 # Create your views here.
@@ -24,11 +25,11 @@ class ExerciseViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets
     serializer_class = ExerciseSerializer
 
 
-class ExerciseUserViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
-    serializer_class = ExerciseUserSerializer
+class ExerciseUserViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+    serializer_class = ExerciseUserCreateSerializer
 
     def get_queryset(self):
-        return ExerciseUser.objects.filter(user_id=self.request.user.id).order_by('-data')
+        return ExerciseUser.objects.all()
 
 
 class ExerciseListUserView(APIView):
