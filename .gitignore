@@ -1,4 +1,5 @@
-/.env
+/app/.env
 /.idea/*
-/db.sqlite3
-/templates/*
+/app/db.sqlite3
+/app/templates/*
+/app/venv/*
