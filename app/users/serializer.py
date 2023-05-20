@@ -16,13 +16,24 @@ class ApiUsersSerializer(serializers.ModelSerializer):
 
 
 class ExerciseSerializer(serializers.ModelSerializer):
+    photos = serializers.JSONField()
+
     class Meta:
         model = Exercise
         fields = ('title', 'photos', 'seconds_time', 'count_calories', 'point')
 
 
 class ExerciseUserSerializer(serializers.ModelSerializer):
+    exercise = ExerciseSerializer
 
     class Meta:
         model = ExerciseUser
-        fields = ('date', 'point')
+        fields = ('date', 'point', 'exercise')
+
+
+class ExerciseNotDoingSerializer(serializers.ModelSerializer):
+    exercise = ExerciseUserSerializer
+
+    class Meta:
+        model = Exercise
+        fields = '__all__'

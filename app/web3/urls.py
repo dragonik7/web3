@@ -3,15 +3,16 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
 
-from users.views import UserViewSet, ExerciseViewSet, ExerciseUserView
+from users.views import UserViewSet, ExerciseViewSet, ExerciseListUserView, ExerciseNotDoingUserView
 from web3 import settings
 router = routers.DefaultRouter()
-router.register(r'user/', UserViewSet, basename='user')
-router.register(r'exercise/', ExerciseViewSet, basename='exercise')
+router.register(r'user', UserViewSet, basename='user')
+router.register(r'exercise', ExerciseViewSet, basename='exercise')
 
 users = [
-    path('<str:apiuser>/days', ExerciseUserView.as_view()),
     path('', include(router.urls)),
+    path('<str:apiuser>/days', ExerciseListUserView.as_view()),
+    path('<str:apiuser>/days/list', ExerciseNotDoingUserView.as_view()),
 ]
 
 urlpatterns = [

@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db.models.aggregates import Sum
+from django.db.models.query_utils import Q
 from drf_spectacular.utils import extend_schema
 from rest_framework import mixins
 from rest_framework import viewsets
@@ -7,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from users.models import Exercise, ExerciseUser
-from users.serializer import ExerciseSerializer, ExerciseUserSerializer, ApiUsersSerializer
+from users.serializer import ExerciseSerializer, ExerciseUserSerializer, ApiUsersSerializer, ExerciseNotDoingSerializer
 
 
 # Create your views here.
@@ -31,10 +32,18 @@ class ExerciseUserViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, view
         return ExerciseUser.objects.filter(user_id=self.request.user.id).order_by('-data')
 
 
-class ExerciseUserView(APIView):
+class ExerciseListUserView(APIView):
     serializer_class = ExerciseUserSerializer
 
     def get(self, request, apiuser):
-        queryset = ExerciseUser.objects.values('date').annotate(Sum('points')).filter(user_id=apiuser)
-        print(queryset.query)
+        queryset = Exercise.objects.all().select_related('users_exercise').values('exerciseuser__date').annotate(
+            Sum('point')).filter(Q(users__id=apiuser))
         return Response(list(queryset))
+
+
+class ExerciseNotDoingUserView(APIView):
+    serializer_class = ExerciseNotDoingSerializer
+
+    def get(self, request, apiuser):
+        queryset = Exercise.objects.raw('select * from users_exercise e left join users_exerciseuser eu on eu.exercise_id = e.id where eu.id is null and e.user_exe')
+        return Response(self.serializer_class(queryset, many=True).data)
