@@ -12,11 +12,12 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('username')
+        fields = ('username', 'first_name')
 
     def create(self, validated_data):
         return User.objects.create(
             username=validated_data['username'],
+            first_name=validated_data['first_name']
         )
 
 
