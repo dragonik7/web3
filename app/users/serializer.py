@@ -1,22 +1,16 @@
-from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from users.models import Exercise
+from users.models import Exercise, ExerciseUser, ApiUser
 
 
-class UserSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(
-        write_only=True,
-        required=True,
-    )
-
+class ApiUsersSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
-        fields = ('username', 'first_name')
+        model = ApiUser
+        fields = ('id', 'first_name')
 
     def create(self, validated_data):
-        return User.objects.create(
-            username=validated_data['username'],
+        return ApiUser.objects.create(
+            id=validated_data['id'],
             first_name=validated_data['first_name']
         )
 
@@ -24,4 +18,11 @@ class UserSerializer(serializers.ModelSerializer):
 class ExerciseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Exercise
-        fields = ('title', 'photos', 'seconds_time', 'count_calories')
+        fields = ('title', 'photos', 'seconds_time', 'count_calories', 'point')
+
+
+class ExerciseUserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ExerciseUser
+        fields = ('date', 'point')
