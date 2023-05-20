@@ -45,5 +45,5 @@ class ExerciseNotDoingUserView(APIView):
     serializer_class = ExerciseNotDoingSerializer
 
     def get(self, request, apiuser):
-        queryset = Exercise.objects.raw('select * from users_exercise e left join users_exerciseuser eu on eu.exercise_id = e.id where eu.id is null and e.user_exe')
+        queryset = Exercise.objects.raw('select * from users_exercise e left join users_exerciseuser eu on eu.exercise_id = e.id where eu.id is null')
         return Response(self.serializer_class(queryset, many=True).data)

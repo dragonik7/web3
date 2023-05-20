@@ -28,7 +28,7 @@ class ExerciseUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ExerciseUser
-        fields = ('date', 'points', 'exercise')
+        fields = ('date', 'exercise')
 
 
 class ExerciseNotDoingSerializer(serializers.ModelSerializer):

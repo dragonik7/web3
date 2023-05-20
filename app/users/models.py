@@ -22,4 +22,3 @@ class ExerciseUser(models.Model):
     exercise = models.ForeignKey(Exercise, on_delete=models.SET_NULL, null=True)
     user = models.ForeignKey(ApiUser, on_delete=models.CASCADE)
     date = models.DateField(auto_now_add=True)
-    points = models.IntegerField(default=10)
