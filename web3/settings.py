@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
+import os
 from datetime import timedelta
 from pathlib import Path
 from web3.config import SECRET_KEY, DEBUG
@@ -58,8 +59,7 @@ ROOT_URLCONF = 'web3.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
-        ,
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -71,6 +71,8 @@ TEMPLATES = [
         },
     },
 ]
+MEDIA_ROOT = BASE_DIR / 'templates'
+MEDIA_URL = '/media/'
 
 WSGI_APPLICATION = 'web3.wsgi.application'
 
