@@ -16,7 +16,7 @@ from users.serializer import ExerciseSerializer, ExerciseUserSerializer, ApiUser
     tags=['User']
 )
 class UserViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
-    queryset = User.objects.all()
+    queryset = ApiUser.objects.all()
     serializer_class = ApiUsersSerializer
 
 
