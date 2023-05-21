@@ -1,5 +1,5 @@
 from django.db.models.aggregates import Sum
-from django.db.models.functions import TruncMonth
+from django.db.models.functions import TruncMonth, TruncDate
 from django.db.models.query_utils import Q
 from drf_spectacular.utils import extend_schema
 from rest_framework import mixins
@@ -37,8 +37,8 @@ class ExerciseListUserView(APIView):
     serializer_class = ExerciseUserSerializer
 
     def get(self, request, apiuser):
-        queryset = Exercise.objects.all().select_related('users_exercise').values('exerciseuser__date').annotate(
-            Sum('point')).filter(Q(users__id=apiuser))
+        # queryset = Exercise.objects.raw('select eu.date, Sum(e.point) from users_exercise e left join users_exerciseuser eu on eu.exercise_id = e.id where user_id like %s group by eu.date', [apiuser])
+        queryset = ExerciseUser.objects.annotate(day=TruncDate('date')).values('day').annotate(total_points=Sum('exercise__point'))
         return Response(list(queryset))
 
 
