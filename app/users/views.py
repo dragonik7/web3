@@ -1,3 +1,5 @@
+from datetime import timedelta, datetime
+
 from django.db.models.aggregates import Sum
 from django.db.models.functions import TruncMonth, TruncDate
 from django.db.models.query_utils import Q
@@ -37,7 +39,10 @@ class ExerciseListUserView(APIView):
     serializer_class = ExerciseUserSerializer
 
     def get(self, request, apiuser):
-        queryset = ExerciseUser.objects.annotate(day=TruncDate('date')).values('day').annotate(total_points=Sum('exercise__point')).filter(user_id=apiuser)
+        today = datetime.now().date()
+        two_days_ago = today - timedelta(days=2)
+        two_days_from_now = today + timedelta(days=2)
+        queryset = ExerciseUser.objects.annotate(day=TruncDate('date')).values('day').annotate(total_points=Sum('exercise__point')).filter(user_id=apiuser, date__range=[two_days_ago, two_days_from_now])
         return Response(list(queryset))
 
 
