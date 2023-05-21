@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 
 from users.models import Exercise, ExerciseUser, ApiUser
 from users.serializer import ExerciseSerializer, ExerciseUserSerializer, ApiUsersSerializer, ExerciseNotDoingSerializer, \
-    ExerciseUserCreateSerializer, ExerciseUserCountSerializer
+    ExerciseUserCreateSerializer
 
 
 # Create your views here.
@@ -51,9 +51,7 @@ class ExerciseNotDoingUserView(APIView):
 
 
 class ExerciseMonthCountUserView(APIView):
-    serializer_class = ExerciseUserCountSerializer
 
     def get(self, request, apiuser):
         queryset = ExerciseUser.objects.annotate(month=TruncMonth('date')).values('month').annotate(total_points=Sum('exercise__point')).filter(user_id=apiuser)
-        print(queryset.query)
         return Response(list(queryset))
