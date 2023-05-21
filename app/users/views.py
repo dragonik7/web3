@@ -37,8 +37,7 @@ class ExerciseListUserView(APIView):
     serializer_class = ExerciseUserSerializer
 
     def get(self, request, apiuser):
-        # queryset = Exercise.objects.raw('select eu.date, Sum(e.point) from users_exercise e left join users_exerciseuser eu on eu.exercise_id = e.id where user_id like %s group by eu.date', [apiuser])
-        queryset = ExerciseUser.objects.annotate(day=TruncDate('date')).values('day').annotate(total_points=Sum('exercise__point'))
+        queryset = ExerciseUser.objects.annotate(day=TruncDate('date')).values('day').annotate(total_points=Sum('exercise__point')).filter(user_id=apiuser)
         return Response(list(queryset))
 
 
