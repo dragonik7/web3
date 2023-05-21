@@ -50,3 +50,11 @@ class ExerciseUserCreateSerializer(serializers.ModelSerializer):
             user=validated_data['user'],
             exercise=validated_data['exercise']
         )
+
+
+class ExerciseUserCountSerializer(serializers.ModelSerializer):
+    exercise = ExerciseSerializer
+
+    class Meta:
+        model = ExerciseUser
+        fields = ('date')

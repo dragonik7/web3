@@ -4,7 +4,8 @@ from django.urls import path, include
 from drf_spectacular.views import SpectacularSwaggerView, SpectacularAPIView
 from rest_framework import routers
 
-from users.views import UserViewSet, ExerciseViewSet, ExerciseListUserView, ExerciseNotDoingUserView, ExerciseUserViewSet
+from users.views import UserViewSet, ExerciseViewSet, ExerciseListUserView, ExerciseNotDoingUserView, \
+    ExerciseUserViewSet, ExerciseMonthCountUserView
 from web3 import settings
 router = routers.DefaultRouter()
 router.register(r'user', UserViewSet, basename='user')
@@ -15,6 +16,7 @@ users = [
     path('', include(router.urls)),
     path('<str:apiuser>/days', ExerciseListUserView.as_view()),
     path('<str:apiuser>/days/list', ExerciseNotDoingUserView.as_view()),
+    path('<str:apiuser>/count_mouth', ExerciseMonthCountUserView.as_view())
 ]
 
 urlpatterns = [

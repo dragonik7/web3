@@ -1,4 +1,5 @@
 from django.db.models.aggregates import Sum
+from django.db.models.functions import TruncMonth
 from django.db.models.query_utils import Q
 from drf_spectacular.utils import extend_schema
 from rest_framework import mixins
@@ -8,7 +9,7 @@ from rest_framework.views import APIView
 
 from users.models import Exercise, ExerciseUser, ApiUser
 from users.serializer import ExerciseSerializer, ExerciseUserSerializer, ApiUsersSerializer, ExerciseNotDoingSerializer, \
-    ExerciseUserCreateSerializer
+    ExerciseUserCreateSerializer, ExerciseUserCountSerializer
 
 
 # Create your views here.
@@ -47,3 +48,12 @@ class ExerciseNotDoingUserView(APIView):
     def get(self, request, apiuser):
         queryset = Exercise.objects.raw('select * from users_exercise e left join users_exerciseuser eu on eu.exercise_id = e.id where eu.id is null or user_id not like %s', [apiuser])
         return Response(self.serializer_class(queryset, many=True).data)
+
+
+class ExerciseMonthCountUserView(APIView):
+    serializer_class = ExerciseUserCountSerializer
+
+    def get(self, request, apiuser):
+        queryset = ExerciseUser.objects.annotate(month=TruncMonth('date')).values('month').annotate(total_points=Sum('exercise__point')).filter(user_id=apiuser)
+        print(queryset.query)
+        return Response(list(queryset))
