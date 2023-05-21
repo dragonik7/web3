@@ -36,7 +36,7 @@ class ExerciseNotDoingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Exercise
-        fields = '__all__'
+        fields = ('title','photos','seconds_time','count_calories','point')
 
 
 class ExerciseUserCreateSerializer(serializers.ModelSerializer):
